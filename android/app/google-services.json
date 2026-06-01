@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "310923149901",
+    "project_id": "fash-food-28712",
+    "storage_bucket": "fash-food-28712.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310923149901:android:b77a9d29e15abb79961204",
+        "android_client_info": {
+          "package_name": "com.fastfood.fash_food"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz70-e6a9xJgKZD7Wnq59LJgssLj6MYBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
