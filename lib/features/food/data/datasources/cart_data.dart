@@ -1,7 +1,7 @@
 class CartData {
   static final List<Map<String, dynamic>> carts = [
     {
-      "userId": "u001", // Giỏ hàng của Nguyễn Văn An
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2", // Giỏ hàng của Nguyễn Văn An
       "items": [
         {
           "productId": "p001",
@@ -21,7 +21,7 @@ class CartData {
       "updatedAt": "2024-06-08T10:00:00"
     },
     {
-      "userId": "u002", // Giỏ hàng của Trần Thị Bình
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3", // Giỏ hàng của Trần Thị Bình
       "items": [
         {
           "productId": "p005",

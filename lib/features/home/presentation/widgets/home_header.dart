@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fash_food/core/theme/app_colors.dart';
+import 'package:fash_food/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fash_food/features/auth/presentation/bloc/auth_state.dart';
 
 class HomeHeader extends StatelessWidget {
   final String userName;
@@ -17,8 +18,6 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Nếu là sticky (dùng trong SliverAppBar), chúng ta để background trong suốt 
-    // và điều chỉnh padding cho phù hợp với FlexibleSpaceBar
     return Container(
       padding: EdgeInsets.fromLTRB(24, isSticky ? 50 : 60, 24, showSearchBar ? 20 : 0),
       decoration: isSticky 
@@ -37,7 +36,7 @@ class HomeHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HomeHeaderUserInfo(userName: userName),
+          const HomeHeaderUserInfo(),
           if (showSearchBar) ...[
             const SizedBox(height: 18),
             const HomeSearchBar(),
@@ -49,40 +48,58 @@ class HomeHeader extends StatelessWidget {
 }
 
 class HomeHeaderUserInfo extends StatelessWidget {
-  final String userName;
-  const HomeHeaderUserInfo({super.key, required this.userName});
+  const HomeHeaderUserInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        String name = 'Khách';
+
+        if (state is AuthSuccess) {
+          final user = state.user;
+          // Nếu có name (in hoa, có dấu) từ Firestore thì dùng ngay
+          if (user.name != null && user.name!.isNotEmpty) {
+            name = user.name!;
+          } else {
+            // Nếu không có, format email cho đẹp hơn (viết hoa chữ đầu)
+            String emailPrefix = user.email.split('@').first;
+            name = emailPrefix[0].toUpperCase() + emailPrefix.substring(1);
+          }
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CircleAvatar(
-              radius: 22,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                const Text('Xin chào 👋',
-                    style: TextStyle(color: Colors.white70, fontSize: 13)),
-                Text(
-                  userName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.white24,
+                  backgroundImage: NetworkImage('https://ui-avatars.com/api/?name=User&background=random'),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Xin chào 👋',
+                        style: TextStyle(color: Colors.white70, fontSize: 13)),
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+            const HomeNotificationIcon(),
           ],
-        ),
-        const HomeNotificationIcon(),
-      ],
+        );
+      },
     );
   }
 }

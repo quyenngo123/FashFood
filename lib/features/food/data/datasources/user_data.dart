@@ -1,7 +1,7 @@
 class UserData {
   static const users = [
     {
-      "uid": "user_001",
+      "uid": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "name": "Nguyễn Văn A",
       "email": "nguyenvana@gmail.com",
       "phone": "0912345678",
@@ -12,7 +12,7 @@ class UserData {
       "isActive": true,
     },
     {
-      "uid": "user_002",
+      "uid": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "name": "Trần Thị B",
       "email": "tranthib@gmail.com",
       "phone": "0987654321",
@@ -23,7 +23,7 @@ class UserData {
       "isActive": true,
     },
     {
-      "uid": "admin_001",
+      "uid": "l6xOyDkL9UNtXtRUkKOCtMM3EC82l6xOyDkL9UNtXtRUkKOCtMM3EC82",
       "name": "Admin FastFood",
       "email": "admin@fastfood.com",
       "phone": "0900000000",

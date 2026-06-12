@@ -2,7 +2,7 @@ class ReviewData {
   static final List<Map<String, dynamic>> reviews = [
     {
       "id": "r001",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "userName": "Nguyễn Văn An",
       "userAvatar": "",
       "productId": "p001",
@@ -17,7 +17,7 @@ class ReviewData {
     },
     {
       "id": "r002",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "userName": "Nguyễn Văn An",
       "userAvatar": "",
       "productId": "p023",
@@ -62,7 +62,7 @@ class ReviewData {
     },
     {
       "id": "r005",
-      "userId": "u002",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "userName": "Trần Thị Bình",
       "userAvatar": "",
       "productId": "p005",
@@ -77,7 +77,7 @@ class ReviewData {
     },
     {
       "id": "r006",
-      "userId": "u002",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "userName": "Trần Thị Bình",
       "userAvatar": "",
       "productId": "p021",
@@ -92,7 +92,7 @@ class ReviewData {
     },
     {
       "id": "r007",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "userName": "Nguyễn Văn An",
       "userAvatar": "",
       "productId": "p009",

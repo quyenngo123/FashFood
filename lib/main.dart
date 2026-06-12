@@ -1,42 +1,21 @@
-import 'package:fash_food/core/firebase/seed_categories.dart';
-import 'package:fash_food/core/firebase/seed_data.dart';
-import 'package:fash_food/core/firebase/seed_orders.dart';
-import 'package:fash_food/core/firebase/seed_users.dart';
-import 'package:fash_food/core/firebase/seed_banner.dart';
-import 'package:fash_food/core/firebase/seed_combos.dart';
-import 'package:fash_food/features/home/presentation/pages/home_page.dart';
+import 'package:fash_food/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fash_food/features/food/presentation/bloc/food_bloc.dart';
+import 'package:fash_food/features/food/presentation/bloc/cart_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fash_food/config/routes/app_router.dart';
 import 'package:fash_food/firebase_options.dart';
 import 'package:fash_food/injection_container.dart' as di;
+import 'package:fash_food/injection_container.dart';
 
-import 'core/firebase/seed_carts.dart';
-import 'core/firebase/seed_adresses.dart';
-import 'core/firebase/seed_reviews.dart';
-import 'core/firebase/seed_notifications.dart';
-import 'core/firebase/seed_favorites.dart';
-import 'core/firebase/seed_vouchers.dart';
-
+import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/orders/presentation/bloc/order_bloc.dart'; // Đã đổi từ food sang orders
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.init();
-  
-  // Bỏ comment các dòng dưới đây để upload dữ liệu lên Firebase, sau đó comment lại
-  // await SeedFoods.uploadFoods();
-  // await SeedCategories.uploadCategories();
-  // await SeedUsers.uploadUsers();
-  // await SeedBanner.uploadBanner();
-  //await SeedCombos.uploadCombos(); // Gọi hàm upload Combo
-   // await SeedOrders.uploadOrders();
-  //await SeedCarts.uploadCarts();
-  //await SeedFavorites.uploadFavorites();
-  //await SeedAddresses.uploadAddresses();
-  //await SeedReviews.uploadReviews();
-  //await SeedNotifications.uploadNotifications();
-  //await SeedVouchers.uploadVouchers();
   
   runApp(const MyApp());
 }
@@ -46,10 +25,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FastFood',
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<AuthBloc>()..add(const CheckAuthRequested())),
+        BlocProvider(create: (_) => sl<FoodBloc>()..add(WatchFoodsEvent())),
+        BlocProvider(create: (_) => sl<CartBloc>()),
+        BlocProvider(create: (_) => sl<OrderBloc>()),
+      ],
+      child: MaterialApp.router(
+        title: 'FastFood',
+        debugShowCheckedModeBanner: false,
+        routerConfig: AppRouter.router,
+      ),
     );
   }
 }

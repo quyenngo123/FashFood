@@ -18,22 +18,36 @@ class FoodModel extends FoodEntity {
 
   factory FoodModel.fromJson(Map<String, dynamic> json) {
     return FoodModel(
-      id: json['id'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      reviewCount: json['reviewCount'] as int? ?? 0,
-      imageUrl: json['imageUrl'] as String? ?? '',
-      category: json['category'] as String? ?? '',
-      isPopular: json['isPopular'] as bool? ?? false,
-      isPromo: json['isPromo'] as bool? ?? false,
-      originalPrice: (json['originalPrice'] as num?)?.toDouble(),
+      // Dùng toString() và các hàm chuyển đổi an toàn để tránh crash khi kiểu dữ liệu trên Firebase không chuẩn
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? 'Không tên',
+      description: json['description']?.toString() ?? '',
+      price: _toDouble(json['price']),
+      rating: _toDouble(json['rating']),
+      reviewCount: _toInt(json['reviewCount']),
+      // Hỗ trợ cả hai tên trường phổ biến 'imageUrl' và 'image'
+      imageUrl: (json['imageUrl'] ?? json['image'])?.toString() ?? '',
+      category: json['category']?.toString() ?? 'Tất cả',
+      isPopular: json['isPopular'] == true,
+      isPromo: json['isPromo'] == true,
+      originalPrice: _toDouble(json['originalPrice']),
     );
   }
 
+  static double _toDouble(dynamic val) {
+    if (val is num) return val.toDouble();
+    if (val is String) return double.tryParse(val) ?? 0.0;
+    return 0.0;
+  }
+
+  static int _toInt(dynamic val) {
+    if (val is num) return val.toInt();
+    if (val is String) return int.tryParse(val) ?? 0;
+    return 0;
+  }
+
   factory FoodModel.fromSnapshot(DocumentSnapshot snapshot) {
-    final data = snapshot.data() as Map<String, dynamic>;
+    final data = snapshot.data() as Map<String, dynamic>? ?? {};
     return FoodModel.fromJson({
       ...data,
       'id': snapshot.id,

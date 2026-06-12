@@ -6,24 +6,27 @@ class FoodRemoteDataSource {
 
   FoodRemoteDataSource({required this.firestore});
 
-  /// Lấy toàn bộ danh sách món ăn
-  Future<List<FoodModel>> getFoods() async {
-    try {
-      final snapshot = await firestore.collection('foods').get();
+  /// Theo dõi danh sách món ăn thời gian thực
+  Stream<List<FoodModel>> watchFoods() {
+    return firestore.collection('foods').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) => FoodModel.fromSnapshot(doc)).toList();
+    });
+  }
+
+  /// Lấy danh mục từ Firestore
+  Future<List<String>> getCategories() async {
+    try {
+      final snapshot = await firestore.collection('categories').get();
+      if (snapshot.docs.isEmpty) return [];
+      // Giả sử mỗi doc có trường 'name'
+      return snapshot.docs.map((doc) => doc.get('name').toString()).toList();
     } catch (e) {
-      throw Exception('Lỗi khi lấy danh sách món ăn: $e');
+      return [];
     }
   }
 
-  /// Lấy chi tiết một món ăn
-  Future<FoodModel?> getFoodById(String id) async {
-    try {
-      final doc = await firestore.collection('foods').doc(id).get();
-      if (!doc.exists) return null;
-      return FoodModel.fromSnapshot(doc);
-    } catch (e) {
-      throw Exception('Lỗi khi lấy chi tiết món ăn: $e');
-    }
+  Future<List<FoodModel>> getFoods() async {
+    final snapshot = await firestore.collection('foods').get();
+    return snapshot.docs.map((doc) => FoodModel.fromSnapshot(doc)).toList();
   }
 }

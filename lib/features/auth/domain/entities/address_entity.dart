@@ -2,13 +2,15 @@ import 'package:equatable/equatable.dart';
 
 class AddressEntity extends Equatable {
   final String id;
-  final String label; // Ví dụ: Nhà riêng, Công ty
+  final String userId; // Thêm trường này
+  final String label;
   final String street;
   final String city;
   final bool isDefault;
 
   const AddressEntity({
     required this.id,
+    required this.userId,
     required this.label,
     required this.street,
     required this.city,
@@ -16,5 +18,5 @@ class AddressEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, label, street, city, isDefault];
+  List<Object?> get props => [id, userId, label, street, city, isDefault];
 }

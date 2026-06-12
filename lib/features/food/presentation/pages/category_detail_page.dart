@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../data/datasources/food_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../config/routes/app_routes.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../domain/entities/food_entity.dart';
+import '../../domain/entities/cart_item_entity.dart';
+import '../bloc/food_bloc.dart';
+import '../bloc/cart_bloc.dart';
 import '../widgets/food_card.dart';
 
 enum SortType { recent, bestSeller, rating }
@@ -22,7 +29,6 @@ class CategoryDetailPage extends StatefulWidget {
 class _CategoryDetailPageState extends State<CategoryDetailPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _cartCount = 0;
   SortType _sortType = SortType.bestSeller;
 
   final List<_TabItem> _tabs = const [
@@ -40,6 +46,14 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
         setState(() => _sortType = _tabs[_tabController.index].sort);
       }
     });
+    
+    context.read<FoodBloc>().add(WatchFoodsEvent());
+    
+    // Sử dụng AuthBloc để lấy userId ổn định hơn
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthSuccess) {
+      context.read<CartBloc>().add(WatchCartEvent(authState.user.uid));
+    }
   }
 
   @override
@@ -48,8 +62,10 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
     super.dispose();
   }
 
-  List<FoodEntity> get _sortedFoods {
-    final foods = FoodData.getByCategory(widget.categoryName);
+  List<FoodEntity> _getSortedFoods(List<FoodEntity> allFoods) {
+    final foods = widget.categoryName == 'Tất cả' 
+        ? allFoods 
+        : allFoods.where((f) => f.category.trim().toLowerCase() == widget.categoryName.trim().toLowerCase()).toList();
 
     switch (_sortType) {
       case SortType.bestSeller:
@@ -57,8 +73,48 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
       case SortType.rating:
         return [...foods]..sort((a, b) => b.rating.compareTo(a.rating));
       case SortType.recent:
-        return [...foods].reversed.toList();
+        return foods.reversed.toList();
     }
+  }
+
+  void _handleAddToCart(FoodEntity food) {
+    final authState = context.read<AuthBloc>().state;
+    String? userId;
+
+    if (authState is AuthSuccess) {
+      userId = authState.user.uid;
+    }
+
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Vui lòng đăng nhập để mua hàng'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    final cartItem = CartItemEntity(
+      productId: food.id,
+      name: food.name,
+      image: food.imageUrl,
+      price: food.price,
+      quantity: 1,
+    );
+
+    context.read<CartBloc>().add(AddToCartEvent(
+      userId: userId,
+      item: cartItem,
+    ));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Đã thêm ${food.name} vào giỏ hàng'),
+        duration: const Duration(seconds: 1),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   @override
@@ -70,9 +126,60 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
           _buildHeader(),
           _buildTabBar(),
           const SizedBox(height: 12),
-          Expanded(child: _buildFoodGrid()),
+          Expanded(
+            child: BlocBuilder<FoodBloc, FoodState>(
+              builder: (context, state) {
+                if (state is FoodLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (state is FoodLoaded) {
+                  final sortedFoods = _getSortedFoods(state.foods);
+                  if (sortedFoods.isEmpty) {
+                    return _buildEmptyState();
+                  }
+                  return _buildFoodGrid(sortedFoods);
+                }
+                if (state is FoodError) {
+                  return Center(child: Text('Lỗi: ${state.message}'));
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.no_food_outlined, size: 60, color: Colors.grey),
+          SizedBox(height: 12),
+          Text('Chưa có món nào trong danh mục này', style: TextStyle(color: Colors.grey, fontSize: 15)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFoodGrid(List<FoodEntity> foods) {
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 14,
+        mainAxisSpacing: 14,
+        childAspectRatio: 0.65,
+      ),
+      itemCount: foods.length,
+      itemBuilder: (context, index) {
+        return FoodCard(
+          food: foods[index],
+          onAddToCart: () => _handleAddToCart(foods[index]),
+        );
+      },
     );
   }
 
@@ -95,62 +202,52 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
           GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.arrow_back_ios_new,
-                  size: 18, color: Colors.white),
+              width: 40, height: 40,
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.white),
             ),
           ),
           const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              widget.categoryName,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-          Stack(
+          Expanded(child: Text(widget.categoryName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 0.5))),
+          _buildCartBadge(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCartBadge() {
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.cart),
+      child: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          int count = 0;
+          if (state is CartLoaded && state.cart != null) {
+            count = state.cart!.totalItems;
+          }
+          
+          return Stack(
+            clipBehavior: Clip.none,
             children: [
               Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.shopping_cart_outlined,
-                    size: 22, color: Colors.white),
+                width: 40, height: 40,
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.shopping_cart_outlined, size: 22, color: Colors.white),
               ),
-              if (_cartCount > 0)
+              if (count > 0)
                 Positioned(
-                  right: 0,
-                  top: 0,
+                  right: -4, top: -4,
                   child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFF5722),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '$_cartCount',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(color: Color(0xFFFF5722), shape: BoxShape.circle),
+                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    child: Center(
+                      child: Text('$count', style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -158,84 +255,17 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>
   Widget _buildTabBar() {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(color: Color(0x0A000000), blurRadius: 10, offset: Offset(0, 3)),
-        ],
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: const [BoxShadow(color: Color(0x0A000000), blurRadius: 10, offset: Offset(0, 3))]),
       child: TabBar(
         controller: _tabController,
         padding: const EdgeInsets.all(4),
-        indicator: BoxDecoration(
-          color: const Color(0xFF0D47A1),
-          borderRadius: BorderRadius.circular(12),
-        ),
+        indicator: BoxDecoration(color: const Color(0xFF0D47A1), borderRadius: BorderRadius.circular(12)),
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF9E9E9E),
-        labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
         dividerColor: Colors.transparent,
-        tabs: _tabs.map((tab) => Tab(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(tab.icon, size: 16),
-              const SizedBox(width: 6),
-              Text(tab.label),
-            ],
-          ),
-        )).toList(),
+        tabs: _tabs.map((tab) => Tab(child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(tab.icon, size: 16), const SizedBox(width: 6), Text(tab.label)]))).toList(),
       ),
-    );
-  }
-
-  Widget _buildFoodGrid() {
-    final foods = _sortedFoods;
-
-    if (foods.isEmpty) {
-      return const Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.no_food_outlined, size: 60, color: Colors.grey),
-            SizedBox(height: 12),
-            Text('Chưa có món nào trong danh mục này',
-                style: TextStyle(color: Colors.grey, fontSize: 15)),
-          ],
-        ),
-      );
-    }
-
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: 0.65, // Giảm tỷ lệ để Card cao hơn, tránh lỗi Overflow
-      ),
-      itemCount: foods.length,
-      itemBuilder: (context, index) {
-        return FoodCard(
-          food: foods[index],
-          onAddToCart: () {
-            setState(() => _cartCount++);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Đã thêm ${foods[index].name}!'),
-                backgroundColor: const Color(0xFF4CAF50),
-                behavior: SnackBarBehavior.floating,
-                duration: const Duration(seconds: 1),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

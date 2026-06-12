@@ -1,19 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-/// Đối tượng User thuần túy — không phụ thuộc Firebase hay bất kỳ thư viện nào
 class UserEntity extends Equatable {
   final String uid;
   final String email;
-  final String? fullName;
+  final String? name;
   final String? photoUrl;
+  final String? phone;
+  final String? address;
 
   const UserEntity({
     required this.uid,
     required this.email,
-    this.fullName,
+    this.name,
     this.photoUrl,
+    this.phone,
+    this.address,
   });
 
   @override
-  List<Object?> get props => [uid, email, fullName, photoUrl];
+  List<Object?> get props => [uid, email, name, photoUrl, phone, address];
 }

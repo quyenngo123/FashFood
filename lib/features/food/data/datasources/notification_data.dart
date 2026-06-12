@@ -2,7 +2,7 @@ class NotificationData {
   static final List<Map<String, dynamic>> notifications = [
     {
       "id": "noti001",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "type": "order_status",
       "title": "Đơn hàng đã được giao! 🎉",
       "body": "Đơn hàng #o001 của bạn đã được giao thành công. Cảm ơn bạn đã tin tưởng!",
@@ -16,7 +16,7 @@ class NotificationData {
     },
     {
       "id": "noti002",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "type": "promotion",
       "title": "🔥 Flash Sale – Giảm 40% Burger hôm nay!",
       "body": "Chỉ trong hôm nay! Tất cả Burger giảm 40%. Đặt ngay kẻo hết!",
@@ -30,7 +30,7 @@ class NotificationData {
     },
     {
       "id": "noti003",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "type": "voucher",
       "title": "🎁 Voucher tặng sinh nhật cho bạn!",
       "body": "Chúc mừng sinh nhật! Bạn nhận được voucher giảm 50K cho đơn từ 150K.",
@@ -44,7 +44,7 @@ class NotificationData {
     },
     {
       "id": "noti004",
-      "userId": "u001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "type": "review_reminder",
       "title": "⭐ Đánh giá món ăn của bạn",
       "body": "Bạn đã thưởng thức Burger Bò Phô Mai chưa? Chia sẻ cảm nhận để nhận 50 điểm thưởng!",
@@ -58,7 +58,7 @@ class NotificationData {
     },
     {
       "id": "noti005",
-      "userId": "u002",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "type": "order_status",
       "title": "🍕 Đơn hàng đang được chuẩn bị",
       "body": "Đơn hàng #o002 đang được chuẩn bị. Dự kiến giao trong 30–45 phút.",
@@ -72,7 +72,7 @@ class NotificationData {
     },
     {
       "id": "noti006",
-      "userId": "u002",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "type": "order_status",
       "title": "🛵 Shipper đang trên đường giao",
       "body": "Shipper Nguyễn Hùng đang giao đơn #o002 đến bạn. Vui lòng chú ý điện thoại!",
@@ -86,7 +86,7 @@ class NotificationData {
     },
     {
       "id": "noti007",
-      "userId": "u002",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "type": "promotion",
       "title": "🧋 Mua 2 Trà Sữa tặng 1 – Hôm nay thôi!",
       "body": "Mua bất kỳ 2 ly trà sữa, nhận ngay 1 ly miễn phí. Áp dụng đến 22h hôm nay.",

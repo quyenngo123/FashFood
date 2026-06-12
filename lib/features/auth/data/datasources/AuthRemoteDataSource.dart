@@ -110,7 +110,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return UserEntity(
       uid: user.uid,
       email: user.email ?? '',
-      fullName: user.displayName,
+      name: user.displayName,
       photoUrl: user.photoURL,
     );
   }

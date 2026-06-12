@@ -1,8 +1,8 @@
 class FavoriteData {
   static final List<Map<String, dynamic>> favorites = [
     {
-      "id": "fav_u001_p001",
-      "userId": "u001",
+      "id": "fav_jE9Kz23sdXhrKDcU9l3wCatBjqt2_p001",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "productId": "p001",
       "productName": "Burger Bò Phô Mai",
       "productImage": "assets/images/categories/burger.png",
@@ -11,8 +11,8 @@ class FavoriteData {
       "addedAt": "2024-05-10T09:00:00"
     },
     {
-      "id": "fav_u001_p009",
-      "userId": "u001",
+      "id": "fav_jE9Kz23sdXhrKDcU9l3wCatBjqt2_p009",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "productId": "p009",
       "productName": "Gà Rán Giòn 3 Miếng",
       "productImage": "assets/images/categories/ga_ran.png",
@@ -21,8 +21,8 @@ class FavoriteData {
       "addedAt": "2024-05-15T14:30:00"
     },
     {
-      "id": "fav_u001_p021",
-      "userId": "u001",
+      "id": "fav_jE9Kz23sdXhrKDcU9l3wCatBjqt2_p021",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "productId": "p021",
       "productName": "Trà Sữa Trân Châu",
       "productImage": "assets/images/categories/do_uong.png",
@@ -31,8 +31,8 @@ class FavoriteData {
       "addedAt": "2024-05-20T08:00:00"
     },
     {
-      "id": "fav_u001_c002",
-      "userId": "u001",
+      "id": "fav_jE9Kz23sdXhrKDcU9l3wCatBjqt2_c002",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "productId": "c002",
       "productName": "Combo Gia Đình Lẩu",
       "productImage": "assets/images/categories/lau.png",
@@ -41,8 +41,8 @@ class FavoriteData {
       "addedAt": "2024-06-01T20:00:00"
     },
     {
-      "id": "fav_u002_p005",
-      "userId": "u002",
+      "id": "fav_aXmD6cns2Vgpc3OA9cJtwAik3SH3_p005",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "productId": "p005",
       "productName": "Pizza Pepperoni",
       "productImage": "assets/images/categories/pizza.png",
@@ -51,8 +51,8 @@ class FavoriteData {
       "addedAt": "2024-04-28T16:00:00"
     },
     {
-      "id": "fav_u002_p019",
-      "userId": "u002",
+      "id": "fav_aXmD6cns2Vgpc3OA9cJtwAik3SH3_p019",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "productId": "p019",
       "productName": "Mì Ý Carbonara",
       "productImage": "assets/images/categories/mi_y.png",
@@ -61,8 +61,8 @@ class FavoriteData {
       "addedAt": "2024-05-05T12:00:00"
     },
     {
-      "id": "fav_u002_p028",
-      "userId": "u002",
+      "id": "fav_aXmD6cns2Vgpc3OA9cJtwAik3SH3_p028",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "productId": "p028",
       "productName": "Bánh Tráng Nướng",
       "productImage": "assets/images/categories/an_vat.png",

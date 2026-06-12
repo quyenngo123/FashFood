@@ -45,4 +45,5 @@ class CartModel extends CartEntity {
       updatedAt: entity.updatedAt,
     );
   }
+
 }

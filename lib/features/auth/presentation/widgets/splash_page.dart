@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fash_food/injection_container.dart';
 import 'package:fash_food/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:fash_food/features/auth/presentation/bloc/auth_event.dart';
 import 'package:fash_food/features/auth/presentation/bloc/auth_state.dart';
 import 'package:fash_food/config/routes/app_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +23,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1500),
     );
 
     _scaleAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
@@ -47,44 +45,54 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      // Sử dụng Package Import đồng bộ
-      create: (_) => sl<AuthBloc>()..add(const CheckAuthRequested()),
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        // Đợi animation logo chạy xong một chút rồi mới chuyển trang
+        Future.delayed(const Duration(seconds: 2), () {
+          if (!context.mounted) return;
+          
           if (state is AuthSuccess) {
             context.go(AppRoutes.home);
           } else if (state is AuthLoggedOut) {
             context.go(AppRoutes.login);
           }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: FadeTransition(
-              opacity: _fadeAnimation,
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 180,
-                      height: 180,
-                      child: CustomPaint(painter: _LogoPainter()),
+        });
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 180,
+                    height: 180,
+                    child: CustomPaint(painter: _LogoPainter()),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'FastFood',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF0D47A1),
+                      letterSpacing: 2.0,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'FastFood',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF0D47A1),
-                        letterSpacing: 1.5,
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Giao hàng nhanh trong 15 phút',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

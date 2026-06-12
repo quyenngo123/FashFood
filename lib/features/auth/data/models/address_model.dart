@@ -3,16 +3,25 @@ import '../../domain/entities/address_entity.dart';
 
 class AddressModel extends AddressEntity {
   const AddressModel({
-    required super.id,
-    required super.label,
-    required super.street,
-    required super.city,
-    super.isDefault = false,
-  });
+    required String id,
+    required String userId,
+    required String label,
+    required String street,
+    required String city,
+    bool isDefault = false,
+  }) : super(
+          id: id,
+          userId: userId,
+          label: label,
+          street: street,
+          city: city,
+          isDefault: isDefault,
+        );
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
       id: json['id'] as String? ?? '',
+      userId: json['userId'] as String? ?? '',
       label: json['label'] as String? ?? '',
       street: json['street'] as String? ?? '',
       city: json['city'] as String? ?? '',
@@ -31,6 +40,7 @@ class AddressModel extends AddressEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'label': label,
       'street': street,
       'city': city,
@@ -41,6 +51,7 @@ class AddressModel extends AddressEntity {
   factory AddressModel.fromEntity(AddressEntity entity) {
     return AddressModel(
       id: entity.id,
+      userId: entity.userId,
       label: entity.label,
       street: entity.street,
       city: entity.city,

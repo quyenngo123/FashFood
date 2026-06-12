@@ -1,8 +1,8 @@
 class AddressData {
   static final List<Map<String, dynamic>> addresses = [
     {
-      "id": "addr_u001_1",
-      "userId": "u001",
+      "id": "addr_jE9Kz23sdXhrKDcU9l3wCatBjqt2_1",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "label": "Nhà",
       "icon": "home",
       "recipientName": "Nguyễn Văn An",
@@ -18,8 +18,8 @@ class AddressData {
       "createdAt": "2024-01-15T10:00:00"
     },
     {
-      "id": "addr_u001_2",
-      "userId": "u001",
+      "id": "addr_jE9Kz23sdXhrKDcU9l3wCatBjqt2_2",
+      "userId": "jE9Kz23sdXhrKDcU9l3wCatBjqt2",
       "label": "Công ty",
       "icon": "work",
       "recipientName": "Nguyễn Văn An",
@@ -35,8 +35,8 @@ class AddressData {
       "createdAt": "2024-02-01T08:00:00"
     },
     {
-      "id": "addr_u002_1",
-      "userId": "u002",
+      "id": "addr_aXmD6cns2Vgpc3OA9cJtwAik3SH3_1",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "label": "Nhà",
       "icon": "home",
       "recipientName": "Trần Thị Bình",
@@ -52,8 +52,8 @@ class AddressData {
       "createdAt": "2024-02-20T09:00:00"
     },
     {
-      "id": "addr_u002_2",
-      "userId": "u002",
+      "id": "addr_aXmD6cns2Vgpc3OA9cJtwAik3SH3_2",
+      "userId": "aXmD6cns2Vgpc3OA9cJtwAik3SH3",
       "label": "Nhà bạn",
       "icon": "people",
       "recipientName": "Bạn Bình",
@@ -68,39 +68,7 @@ class AddressData {
       "isDefault": false,
       "createdAt": "2024-03-10T15:00:00"
     },
-    {
-      "id": "addr_u003_1",
-      "userId": "u003",
-      "label": "Nhà",
-      "icon": "home",
-      "recipientName": "Lê Minh Cường",
-      "phone": "0923456789",
-      "street": "78 Hai Bà Trưng",
-      "ward": "Phường Đa Kao",
-      "district": "Quận 1",
-      "city": "TP. Hồ Chí Minh",
-      "fullAddress": "78 Hai Bà Trưng, Phường Đa Kao, Quận 1, TP. Hồ Chí Minh",
-      "latitude": 10.7886,
-      "longitude": 106.6974,
-      "isDefault": true,
-      "createdAt": "2023-11-10T11:00:00"
-    },
-    {
-      "id": "addr_u003_2",
-      "userId": "u003",
-      "label": "Văn phòng",
-      "icon": "work",
-      "recipientName": "Lê Minh Cường",
-      "phone": "0923456789",
-      "street": "200 Điện Biên Phủ",
-      "ward": "Phường 7",
-      "district": "Quận 3",
-      "city": "TP. Hồ Chí Minh",
-      "fullAddress": "200 Điện Biên Phủ, Phường 7, Quận 3, TP. Hồ Chí Minh",
-      "latitude": 10.7812,
-      "longitude": 106.6921,
-      "isDefault": false,
-      "createdAt": "2023-12-01T08:30:00"
-    }
+
+
   ];
 }
